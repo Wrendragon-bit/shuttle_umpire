@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shuttle Umpire – badminton camera scorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+<header>
+  <h1>Shuttle Umpire</h1>
+  <span class="sub">Camera-assisted badminton scoring with official rally-point rules</span>
+</header>
+
+<section class="panel board" aria-label="Scoreboard">
+  <div class="banner" id="banner" role="status" aria-live="polite"></div>
+  <div class="teams">
+    <div class="team" style="--tc:var(--a)">
+      <input type="text" id="n0" value="Team A" aria-label="Team A name" maxlength="20">
+      <div class="num" id="s0">0</div>
+      <div class="meta"><span id="side0"></span><span class="pips" id="p0"></span></div>
+      <div class="srv" id="v0"></div>
+      <button class="plus" id="add0">+1 point</button>
+    </div>
+    <div class="team" style="--tc:var(--b)">
+      <input type="text" id="n1" value="Team B" aria-label="Team B name" maxlength="20">
+      <div class="num" id="s1">0</div>
+      <div class="meta"><span id="side1"></span><span class="pips" id="p1"></span></div>
+      <div class="srv" id="v1"></div>
+      <button class="plus" id="add1">+1 point</button>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn" id="undo">Undo</button>
+    <button class="btn" id="reset">New match</button>
+    <select id="mode" aria-label="Match type"><option value="s">Singles</option><option value="d">Doubles</option></select>
+    <label class="f"><input type="checkbox" id="sp"> Call score aloud</label>
+  </div>
+  <details>
+    <summary>Rules applied</summary>
+    <ul>
+      <li>Rally point: every rally gives a point to the winner.</li>
+      <li>A game goes to 21 and must be won by 2 points; at 29–29 the next point wins (30).</li>
+      <li>Best of 3 games. The winner of a rally serves next.</li>
+      <li>Server stands in the right court when their score is even, left when odd.</li>
+      <li>Doubles: the serving side swaps courts after each point it wins; the receiving side does not swap when it wins the serve.</li>
+      <li>Interval at 11 points; ends change after each game and at 11 in game 3.</li>
+      <li>Shuttle landing on a line is IN. Landing inside = point to the other side; landing outside = point against the side that hit it.</li>
+    </ul>
+  </details>
+  <ul class="log" id="log" aria-label="Point history"></ul>
+  <div class="ai hide"><div class="row"><input type="text" id="q" placeholder="Ask the AI umpire a rules question" aria-label="Rules question" style="flex:1;min-width:0;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:0 10px;background:var(--card);color:var(--ink);font:400 15px Barlow,system-ui,sans-serif"><button class="btn" id="ask">Ask AI</button></div><p class="st" id="ans"></p></div>
+</section>
+
+<section class="panel cam" aria-label="Camera">
+  <div class="stage"><canvas id="cv" width="960" height="540"></canvas><video id="vid" playsinline muted></video></div>
+  <div class="row">
+    <button class="btn pri" id="cam">Start camera</button>
+    <button class="btn" id="cal">Calibrate court</button>
+    <select id="det" aria-label="Detection mode"><option value="auto">Auto-score</option><option value="ask">Suggest only</option></select>
+  </div>
+  <div class="row">
+    <label class="f"><input type="checkbox" id="sim"> Simulate: tap the court to drop a shuttle</label>
+    <label class="f">Sensitivity <input type="range" id="sens" min="1" max="10" value="6"></label>
+  </div>
+  <div class="row ai hide"><button class="btn" id="aiCourt">AI: find court</button></div>
+  <p class="st" id="st">Put the camera anywhere with the whole court in view: side, corner or behind, low or high. Start the camera, then let the AI find the court (or tap “Calibrate court”) and drag the corners to match the lines.</p>
+</section>
+</div>
+<div class="toast hide" id="toast"><div><span id="tt"></span><span id="tb"></span></div></div>
+
+<script src="app.js"></script>
+</body>
+</html>
